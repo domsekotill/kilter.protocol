@@ -10,7 +10,7 @@ HTML_BUILDER = html
 # Values above this line may be modified from cmdline
 # ======
 
-BUILD_SRC = conf.py Makefile
+BUILD_SRC = Makefile $(wildcard *.py)
 SPHINX_SRC = $(BUILD_SRC) index.md kilter.protocol.rst
 SPHINX_SRC += wire-protocol.md wire-protocol-messages.md
 APIDOC_SRC := $(BUILD_SRC)

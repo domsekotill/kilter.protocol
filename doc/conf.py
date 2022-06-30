@@ -13,7 +13,9 @@ extensions = [
 	"sphinx.ext.autodoc",
 	"sphinx.ext.doctest",
 	"sphinx.ext.viewcode",
+	"sphinx.ext.intersphinx",
 	"myst_parser",
+	"docstring",
 ]
 myst_enable_extensions = [
 	"substitution",
@@ -36,4 +38,8 @@ myst_heading_anchors = 3
 
 myst_substitutions = {
 	"libmilter": "*__libmilter__*",
+}
+
+intersphinx_mapping = {
+	"python": ("https://docs.python.org/3", None),
 }

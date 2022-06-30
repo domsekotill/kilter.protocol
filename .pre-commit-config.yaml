@@ -100,3 +100,4 @@ repos:
     args: [--follow-imports=silent]
     additional_dependencies:
     - trio-typing
+    - sphinx
