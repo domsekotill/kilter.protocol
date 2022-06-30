@@ -1,0 +1,13 @@
+FROM python:3.10
+WORKDIR /src
+RUN pip install trio
+RUN --mount=source=pyproject.toml,target=/src/pyproject.toml \
+    --mount=source=README.md,target=/src/README.md \
+    --mount=source=kilter,target=/src/kilter \
+    pip install /src
+COPY tests/example_filter.py /example_filter.py
+
+EXPOSE 1025
+CMD ["/usr/local/bin/python", "/example_filter.py"]
+
+# vim: ft=dockerfile
