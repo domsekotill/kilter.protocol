@@ -115,7 +115,7 @@ Check Tag:
     END
 
 
-Upload Package:
+Upload Package (Test):
   stage: deploy
   extends: [.python]
   needs: ["Build Package"]
@@ -129,6 +129,23 @@ Upload Package:
     --verbose
     --non-interactive
     --repository-url $CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/pypi
+    dist/*
+
+
+Upload Package (PyPI):
+  stage: deploy
+  extends: [.python]
+  needs: ["Build Package"]
+  rules:
+  - if: $PYPI_TOKEN && $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+$$/
+    when: manual
+  script:
+  - pip install twine
+  - TWINE_USERNAME=__token__
+    TWINE_PASSWORD=$PYPI_TOKEN
+    twine upload
+    --verbose
+    --non-interactive
     dist/*
 
 
