@@ -83,6 +83,9 @@ disallow_any_explicit = true
 # disallow_any_expr = true
 
 
+[tool.pytest.ini_options]
+python_classes = ""
+
 [tool.coverage.run]
 data_file = "results/coverage.db"
 branch = true
