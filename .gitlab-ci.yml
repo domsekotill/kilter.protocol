@@ -164,6 +164,7 @@ Documentation:
 
 pages:
   stage: deploy
+  image: alpine
   needs: [Documentation]
   rules:
   - if: $CI_COMMIT_TAG
