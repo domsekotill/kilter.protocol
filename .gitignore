@@ -2,6 +2,8 @@
 *.py[co]
 
 # Packages
+*.tar.*
+*.tar
 *.whl
 
 # Test results
