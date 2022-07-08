@@ -53,7 +53,7 @@ Build Package:
 
 Pin:
   # Pin dependencies in requirements.txt for reproducing pipeline results
-  stage: test
+  stage: build
   extends: [.python]
   script:
   - pip install --prefer-binary -e .
@@ -121,7 +121,7 @@ Check Tag:
 Upload Package (Test):
   stage: deploy
   extends: [.python]
-  needs: ["Build Package"]
+  dependencies: ["Build Package"]
   rules:
   - if: $CI_COMMIT_TAG
   script:
@@ -138,7 +138,7 @@ Upload Package (Test):
 Upload Package (PyPI):
   stage: deploy
   extends: [.python]
-  needs: ["Build Package"]
+  dependencies: ["Build Package"]
   rules:
   - if: $PYPI_TOKEN && $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+$$/
     when: manual
@@ -165,7 +165,7 @@ Documentation:
 pages:
   stage: deploy
   image: alpine
-  needs: [Documentation]
+  dependencies: [Documentation]
   rules:
   - if: $CI_COMMIT_TAG
   script:
