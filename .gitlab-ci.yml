@@ -47,6 +47,7 @@ Build Package:
   script:
   - pip install build
   - python -m build
+  - (set dist/kilter_protocol-*.whl; mv "$1" "${1/kilter_protocol/kilter.protocol}")
   artifacts:
     paths: [dist]
 
