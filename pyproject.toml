@@ -32,6 +32,7 @@ docs = [
 
 [project.urls]
 Repository = "https://code.kodo.org.uk/dom/kilter.protocol"
+Documentation = "http://dom.doc.kodo.org.uk/kilter.protocol"
 
 
 [tool.isort]
