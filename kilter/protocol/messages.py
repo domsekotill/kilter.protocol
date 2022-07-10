@@ -171,7 +171,7 @@ class Message(metaclass=ABCMeta):
 	@classmethod
 	def unpack(cls, buf: FixedSizeBuffer) -> tuple[Message, int]:
 		"""
-		Unpack the first message in a buffer and return an instance of the correct class
+		Unpack a message in buff and return a subclass instance and the number of bytes read
 		"""
 		hdr_size = cls._hdr_struct.size
 		if buf.filled < hdr_size:
