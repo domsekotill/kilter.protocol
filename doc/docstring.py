@@ -33,7 +33,7 @@ def add_roles(
 	python objects in backticks for cross linking.
 	"""
 	replacer = get_replacer(what, obj, name)
-	regex = re.compile(r"(?<![^:])`(?P<name>[a-z0-9_.]+)(\(\))?`", re.I)
+	regex = re.compile(r"(?<![:])`(?P<name>[a-z0-9_.]+)(\(\))?`", re.I)
 	lines[:] = (regex.sub(replacer, line) for line in lines)
 
 
