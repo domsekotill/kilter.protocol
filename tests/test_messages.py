@@ -116,7 +116,7 @@ class GenericTests(TestCaseMixin, Protocol[T]):
 		if not ident:
 			return
 		cls.message_ident = ident
-		base=cls
+		base = cls
 		for gbase in base.__orig_bases__:  # type: ignore
 			if get_type_origin(gbase) is GenericTests:
 				cls.message_class, *_ = get_type_args(gbase)

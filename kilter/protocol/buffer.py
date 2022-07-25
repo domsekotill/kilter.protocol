@@ -93,13 +93,13 @@ class FixedSizeBuffer(Protocol):
 	def filled(self) -> int:
 		"""
 		The amount of the buffer (in bytes) that has been filled
-		""" # noqa: D401
+		"""  # noqa: D401
 
 	@property
 	def available(self) -> int:
 		"""
 		The amount of the buffer (in bytes) that is unfilled and available
-		""" # noqa: D401
+		"""  # noqa: D401
 
 	def get_free(self, size: int) -> memoryview:
 		"""
@@ -160,7 +160,7 @@ class SimpleBuffer:
 	def available(self) -> int:
 		"""
 		The amount of the buffer (in bytes) that is unfilled and available
-		""" # noqa: D401
+		"""  # noqa: D401
 		return len(self.buffer) - self.filled
 
 	def get_free(self, size: int) -> memoryview:

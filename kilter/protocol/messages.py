@@ -113,6 +113,7 @@ class Stage(int, Enum):
 
 BFSelf = TypeVar("BFSelf", bound="BitField")
 
+
 class BitField(int, Enum):
 	"""
 	Base class for bit-field enums like ActionFlags and ProtocolFlags
@@ -671,25 +672,30 @@ class Continue(NoDataMessage, ident=b"c"):
 	A filter response instructing an MTA to continue without a specific decision
 	"""
 
+
 class Reject(NoDataMessage, ident=b"r"):
 	"""
 	A filter response instructing an MTA to reject a message
 	"""
+
 
 class Discard(NoDataMessage, ident=b"d"):
 	"""
 	A filter response instructing an MTA to reject a message without informing the client
 	"""
 
+
 class Accept(NoDataMessage, ident=b"a"):
 	"""
 	A filter response instructing an MTA to accept a message
 	"""
 
+
 class TemporaryFailure(NoDataMessage, ident=b"t"):
 	"""
 	A filter response instructing an MTA to reject a message temporarily (i.e. with a 4xx)
 	"""
+
 
 class Skip(NoDataMessage, ident=b"s"):
 	"""
@@ -704,7 +710,6 @@ class ReplyCode(BytesMessage, ident=b"y"):
 	"""
 	A filter response instructing an MTA to reject a message with a specific code and reason
 	"""
-
 
 
 # Modification Messages
