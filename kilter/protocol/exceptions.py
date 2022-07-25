@@ -8,6 +8,11 @@
 Exceptions raised by the package
 """
 
+__all__ = [
+	"InsufficientSpace", "NeedsMore", "UnexpectedMessage", "InvalidMessage",
+	"UnimplementedWarning",
+]
+
 
 class InsufficientSpace(Exception):
 	"""
