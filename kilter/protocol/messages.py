@@ -354,6 +354,11 @@ class BytesMessage(Message):
 			f"{self.content[:20].tobytes()!r} + {len(self.content)-20} further bytes"
 		return f"{self.__class__.__name__}({content})"
 
+	def __eq__(self, other: object) -> bool:
+		if not isinstance(other, type(self)):
+			return NotImplemented
+		return other.content == self.content
+
 	@classmethod
 	def from_buffer(cls: type[Self], buf: memoryview) -> Self:
 		return cls(buf)
