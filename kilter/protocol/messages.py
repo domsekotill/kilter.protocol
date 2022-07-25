@@ -570,7 +570,7 @@ class EnvelopeRecipient(Message, ident=b"R"):
 		Self = TypeVar("Self", bound="EnvelopeRecipient")
 
 	recipient: bytes
-	arguments: list[bytes]
+	arguments: list[bytes] = field(default_factory=list)
 
 	@classmethod
 	def from_buffer(cls: type[Self], buf: memoryview) -> Self:
