@@ -347,7 +347,7 @@ class BytesMessage(Message):
 	content: memoryview
 
 	def __init__(self, content: bytes):
-		self.content = memoryview(content)
+		self.content = memoryview(content).toreadonly()
 
 	def __repr__(self) -> str:
 		content = repr(self.content.tobytes()) if len(self.content) <= 30 else \
