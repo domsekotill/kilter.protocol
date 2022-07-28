@@ -82,7 +82,7 @@ repos:
     stages: [commit, manual]
 
 - repo: https://github.com/flakeheaven/flakeheaven
-  rev: 2.1.1
+  rev: 2.1.3
   hooks:
   - id: flakeheaven
     additional_dependencies:
