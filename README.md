@@ -16,7 +16,7 @@ at [`kilter.service`][].
 What is understood about the wire protocol is documented in 
 [Wire Protocol](doc/wire-protocol.md).
 
-[`kilter.service`]: https://code.kodo.org.uk/dom/kilter.service
+[`kilter.service`]: https://code.kodo.org.uk/kilter/kilter.service
 
 
 Sendmail Filters
