@@ -1,3 +1,10 @@
+[![gitlab-ico]][gitlab-link]
+[![licence-mpl20]](/LICENCE.txt)
+[![pre-commit-ico]][pre-commit-link]
+[![pipeline-status]][pipeline-report]
+[![coverage status]][coverage report]
+
+
 Kilter Protocol
 ===============
 
@@ -56,3 +63,39 @@ a socket to a protocol handler, which returns event objects.  Some of these even
 the service to pass bytes back to the socket, others are actionable in ways that are 
 implementation specific.  When an implementation wants to communicate with an MTA, it 
 registers messages with the protocol handler, which again returns event objects.
+
+
+---
+
+[gitlab-ico]:
+  https://img.shields.io/badge/GitLab-code.kodo.org.uk-blue.svg?logo=gitlab
+  "GitLab"
+
+[gitlab-link]:
+  https://code.kodo.org.uk/kilter/kilter.protocol
+  "Kilter Protocol at code.kodo.org.uk"
+
+[pre-commit-ico]:
+  https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
+  "Pre-Commit: enabled"
+
+[pre-commit-link]:
+  https://github.com/pre-commit/pre-commit
+  "Pre-Commit at GitHub.com"
+
+[licence-mpl20]:
+  https://img.shields.io/badge/Licence-MPL--2.0-blue.svg
+  "Licence: Mozilla Public License 2.0"
+
+[pipeline-status]:
+  https://code.kodo.org.uk/kilter/kilter.protocol/badges/main/pipeline.svg
+
+[pipeline-report]:
+  https://code.kodo.org.uk/kilter/kilter.protocol/pipelines/latest
+  "Pipelines"
+
+[coverage status]:
+  https://code.kodo.org.uk/kilter/kilter.protocol/badges/main/coverage.svg
+
+[coverage report]:
+  https://code.kodo.org.uk/kilter/kilter.protocol/-/jobs/artifacts/main/file/results/coverage/index.html?job=Unit+Tests
