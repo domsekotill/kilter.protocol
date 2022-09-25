@@ -52,21 +52,6 @@ on-the-wire protocol used is undocumented and subject to change between versions
 makes writing a third-party parser difficult.
 
 
-Usage
-=====
-
-Most users will be looking for an asynchronous API using Python coroutines: this is 
-available with the [`kilter.service`][] package.  The protocol handlers provided by this 
-package support asynchronous operation but does not handle any IO, thus have no awaitable 
-entrypoints. Instead a service that handles socket communication with MTAs passes bytes from 
-a socket to a protocol handler, which returns event objects.  Some of these events instruct 
-the service to pass bytes back to the socket, others are actionable in ways that are 
-implementation specific.  When an implementation wants to communicate with an MTA, it 
-registers messages with the protocol handler, which again returns event objects.
-
-
----
-
 [gitlab-ico]:
   https://img.shields.io/badge/GitLab-code.kodo.org.uk-blue.svg?logo=gitlab
   "GitLab"
@@ -99,3 +84,16 @@ registers messages with the protocol handler, which again returns event objects.
 
 [coverage report]:
   https://code.kodo.org.uk/kilter/kilter.protocol/-/jobs/artifacts/main/file/results/coverage/index.html?job=Unit+Tests
+
+
+Usage
+=====
+
+Most users will be looking for an asynchronous API using Python coroutines: this is 
+available with the [`kilter.service`][] package.  The protocol handlers provided by this 
+package support asynchronous operation but does not handle any IO, thus have no awaitable 
+entrypoints. Instead a service that handles socket communication with MTAs passes bytes from 
+a socket to a protocol handler, which returns event objects.  Some of these events instruct 
+the service to pass bytes back to the socket, others are actionable in ways that are 
+implementation specific.  When an implementation wants to communicate with an MTA, it 
+registers messages with the protocol handler, which again returns event objects.
