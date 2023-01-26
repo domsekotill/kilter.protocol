@@ -55,7 +55,7 @@ ResponseMessage: TypeAlias = Union[
 	ReplyCode,
 ]
 """
-Messages send from a filter to an MTA in response to `EventMessages`
+Messages send from a filter to an MTA in response to an `EventMessage`
 """
 
 EditMessage: TypeAlias = Union[
