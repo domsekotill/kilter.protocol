@@ -14,4 +14,4 @@ from .messages import *
 if TYPE_CHECKING:
 	from .buffer import FixedSizeBuffer as FixedSizeBuffer
 
-__version__ = "0.1.4"
+__version__ = "0.2.0"
