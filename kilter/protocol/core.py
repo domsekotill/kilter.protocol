@@ -1,4 +1,4 @@
-# Copyright 2022 Dominik Sekotill <dom.sekotill@kodo.org.uk>
+# Copyright 2022-2023 Dominik Sekotill <dom.sekotill@kodo.org.uk>
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -160,7 +160,7 @@ class FilterProtocol:
 				return
 			except NotImplementedError as exc:
 				if len(exc.args) != 1:
-					raise
+					raise  # pragma: no-cover
 				data = exc.args[0]
 				warn(UnimplementedWarning(f"unimplemented message: {data!r}"))
 				message = Unimplemented(data)
