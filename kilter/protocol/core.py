@@ -163,7 +163,7 @@ class FilterProtocol:
 					raise  # pragma: no-cover
 				data = exc.args[0]
 				warn(UnimplementedWarning(f"unimplemented message: {data!r}"))
-				message = Unimplemented(data)
+				yield Unimplemented(data)
 				del buf[:len(data)]
 			else:
 				self._check_recv(message)
