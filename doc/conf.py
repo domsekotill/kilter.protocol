@@ -42,4 +42,5 @@ myst_substitutions = {
 
 intersphinx_mapping = {
 	"python": ("https://docs.python.org/3", None),
+	"kilter.service": ("https://kilter.doc.kodo.org.uk/kilter.service/", None),
 }
