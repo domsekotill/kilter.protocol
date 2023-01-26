@@ -34,6 +34,7 @@ coverage = [
 
 [project.urls]
 Source = "https://code.kodo.org.uk/kilter/kilter.protocol"
+Issues = "https://code.kodo.org.uk/kilter/kilter.protocol/-/issues"
 Documentation = "http://kilter.doc.kodo.org.uk/kilter.protocol"
 
 
