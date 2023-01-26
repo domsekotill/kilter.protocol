@@ -21,7 +21,7 @@ Users looking for something as simple to use as [`libmilter`](#libmilter) should
 at [`kilter.service`][].
 
 What is understood about the wire protocol is documented in 
-[Wire Protocol](doc/wire-protocol.md).
+[Wire Protocol](https://kilter.doc.kodo.org.uk/kilter.protocol/wire-protocol/).
 
 [`kilter.service`]: https://code.kodo.org.uk/kilter/kilter.service
 
