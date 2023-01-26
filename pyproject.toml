@@ -27,6 +27,10 @@ docs = [
 	"myst-parser",
 	"sphinx-rtd-theme",
 ]
+coverage = [
+	"coverage[toml]",
+	"kodo.plugins.cover-test-context",
+]
 
 [project.urls]
 Source = "https://code.kodo.org.uk/kilter/kilter.protocol"
