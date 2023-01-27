@@ -1,5 +1,8 @@
 """
-Parsers and state machines for the communications protocol used between the MTAs and filters
+Parsers and state machines for the Sendmail milter communications protocol
+
+This is a low-level package for the milter protocol used between a mail transfer agent (MTA)
+and mail filters.
 
 Users looking for something as simple to use as libmilter should take a look at
 `kilter.service`.

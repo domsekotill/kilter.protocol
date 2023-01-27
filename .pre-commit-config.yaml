@@ -42,6 +42,7 @@ repos:
   - id: copyright-notice
     args: [--min-size=500]
     files: ^kilter/.*
+    exclude: ^kilter/protocol/__init__.py$
     stages: [commit, manual]
   - id: protect-first-parent
 
