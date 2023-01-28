@@ -223,7 +223,7 @@ class FilterProtocol:
 	def write_to(
 		self,
 		buf: FixedSizeBuffer,
-		message: ResponseMessage|EditMessage|Skip,
+		message: ResponseMessage|EditMessage|Negotiate|Skip,
 	) -> None:
 		"""
 		Validate and pack response and modification messages into a buffer
