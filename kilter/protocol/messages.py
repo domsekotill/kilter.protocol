@@ -37,6 +37,7 @@ from typing_extensions import Self
 
 from .exceptions import InsufficientSpace
 from .exceptions import NeedsMore
+from .exceptions import UnknownMessage
 
 if TYPE_CHECKING:
 	from .buffer import FixedSizeBuffer
@@ -262,7 +263,7 @@ class Message(metaclass=ABCMeta):
 		try:
 			msg_class = cls._message_classes[ident]
 		except KeyError:
-			raise NotImplementedError(buf[:end].tobytes())
+			raise UnknownMessage(buf[:end].tobytes())
 		else:
 			with buf[hdr_size:end] as data:
 				return msg_class.from_buffer(data), end

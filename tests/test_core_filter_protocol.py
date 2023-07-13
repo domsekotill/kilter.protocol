@@ -9,11 +9,10 @@ from ipaddress import IPv4Address
 
 from kilter.protocol.buffer import SimpleBuffer
 from kilter.protocol.core import FilterProtocol
-from kilter.protocol.core import Unimplemented
 from kilter.protocol.exceptions import InvalidMessage
 from kilter.protocol.exceptions import NeedsMore
 from kilter.protocol.exceptions import UnexpectedMessage
-from kilter.protocol.exceptions import UnimplementedWarning
+from kilter.protocol.exceptions import UnknownMessage
 from kilter.protocol.messages import NoDataMessage
 from kilter.protocol.messages import *
 
@@ -60,17 +59,18 @@ class FilterProtocolTests(unittest.TestCase):
 
 	def test_read_unimplemented(self) -> None:
 		"""
-		Check that unknown messages cause a warning to be issued, and are yielded raw
+		Check that unknown messages cause UnknownMessage to be raised
 		"""
 		buf = SimpleBuffer(20)
-		buf[:] = b"\x00\x00\x00\x01S"
+		buf[:] = msg = b"\x00\x00\x00\x01S"
 
-		with self.assertWarns(UnimplementedWarning):
-			for msg in FilterProtocol().read_from(buf):
-				self.assertIsInstance(msg, Unimplemented)
+		with self.assertRaises(UnknownMessage) as exc_cm:
+			for _ in FilterProtocol().read_from(buf):
 				break
 			else:
 				self.fail("No messages read")
+
+		assert exc_cm.exception.contents == msg
 
 	def test_read_unexpected(self) -> None:
 		"""

@@ -25,7 +25,7 @@ from .buffer import FixedSizeBuffer
 from .exceptions import InvalidMessage
 from .exceptions import NeedsMore
 from .exceptions import UnexpectedMessage
-from .exceptions import UnimplementedWarning
+from .exceptions import UnknownMessage
 from .messages import *
 
 EventMessage: TypeAlias = Union[
@@ -90,12 +90,6 @@ FilterMessage: TypeAlias = Union[
 """
 All messages that can be sent from a filter to an MTA
 """
-
-
-class Unimplemented(messages.BytesMessage, ident=b"\x00"):
-	"""
-	A message that has not been implemented by this package yet
-	"""
 
 
 MTA_EVENT_RESPONSES = {
@@ -181,7 +175,6 @@ MTA_EVENT_RESPONSES = {
 	},
 	messages.Abort.ident: None,
 	messages.Close.ident: None,
-	Unimplemented.ident: {messages.Continue.ident},
 }
 
 UPDATE_RESPONSES = {
@@ -213,7 +206,7 @@ class FilterProtocol:
 	def read_from(
 		self,
 		buf: FixedSizeBuffer,
-	) -> Iterable[MTAMessage|Unimplemented]:
+	) -> Iterable[MTAMessage]:
 		"""
 		Return an iterator yielding each complete message from a buffer
 
@@ -227,13 +220,9 @@ class FilterProtocol:
 				message, size = messages.Message.unpack(buf)
 			except NeedsMore:
 				return
-			except NotImplementedError as exc:
-				if len(exc.args) != 1:
-					raise  # pragma: no-cover
-				data = exc.args[0]
-				warn(UnimplementedWarning(f"unimplemented message: {data!r}"))
-				yield Unimplemented(data)
-				del buf[:len(data)]
+			except UnknownMessage as exc:
+				del buf[:len(exc.contents)]
+				raise
 			else:
 				yield self._check_recv(message)
 				message.release()

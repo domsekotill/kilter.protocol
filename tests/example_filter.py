@@ -12,7 +12,6 @@ from kilter.protocol import messages
 from kilter.protocol.buffer import SimpleBuffer
 from kilter.protocol.core import FilterMessage
 from kilter.protocol.core import FilterProtocol
-from kilter.protocol.core import Unimplemented
 
 
 async def server() -> None:
@@ -63,11 +62,6 @@ async def process_client(client: trio.SocketStream, nursery: trio.Nursery) -> No
 						messages.Unknown() | messages.Header() | messages.EndOfHeaders() | \
 						messages.Body() | messages.EndOfMessage():
 						await send_channel.send(messages.Continue())
-					case Unimplemented():
-						logging.warning(f"don't know how to respond to {message!r}, send Continue")
-						await send_channel.send(messages.Continue())
-					case _:
-						logging.warning(f"don't know how to respond to {message!r}")
 
 
 async def client_sender(

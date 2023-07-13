@@ -24,6 +24,7 @@ from kilter.protocol import messages
 from kilter.protocol.buffer import SimpleBuffer
 from kilter.protocol.exceptions import InsufficientSpace
 from kilter.protocol.exceptions import NeedsMore
+from kilter.protocol.exceptions import UnknownMessage
 
 from .unittest_helpers import TestCaseMixin
 
@@ -69,12 +70,12 @@ class MessageTests(TestCase):
 
 	def test_not_implemented(self) -> None:
 		"""
-		Check that attempting to unpack messages with unknown types raises NotImplementedError
+		Check that attempting to unpack messages with unknown types raises UnknownMessage
 		"""
 		buf = SimpleBuffer(50)
 
 		buf[0:] = b"\x00\x00\x00\x01Z"
-		with self.assertRaises(NotImplementedError):
+		with self.assertRaises(UnknownMessage):
 			messages.Message.unpack(buf)
 
 	def test_malformatted(self) -> None:
