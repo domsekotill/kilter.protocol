@@ -21,6 +21,10 @@ classifiers = [
 	"Topic :: Communications :: Email :: Filters",
 ]
 
+dependencies = [
+	"typing-extensions",
+]
+
 [project.optional-dependencies]
 docs = [
 	"sphinx ~=5.0",

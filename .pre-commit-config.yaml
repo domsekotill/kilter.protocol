@@ -102,3 +102,4 @@ repos:
     additional_dependencies:
     - trio-typing
     - sphinx
+    - typing-extensions
