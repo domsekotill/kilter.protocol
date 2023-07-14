@@ -101,6 +101,22 @@ class MessageTests(TestCase):
 
 			assert buf[:].tobytes() == b"this is "
 
+	def test_no_space_after_header(self) -> None:
+		"""
+		Check that attempting to pack to near-full buffer raises InsufficientSpace
+
+		Differs from `test_no_space` in that there is sufficient space for the message
+		header.
+		"""
+		buf = SimpleBuffer(15)
+		buf[:] = b"this is "
+		message = messages.Body(b"an ex parrot")
+
+		with self.assertRaises(InsufficientSpace):
+			message.pack(buf)
+
+			assert buf[:].tobytes() == b"this is "
+
 
 class GenericTests(TestCaseMixin, Protocol[T]):
 	"""
@@ -238,6 +254,16 @@ class GenericTests(TestCaseMixin, Protocol[T]):
 
 				m.release()
 				del buf[:s-5]
+
+	def test_buffer_release_noop(self) -> None:
+		"""
+		Check that releasing a message that holds no memoryviews works
+		"""
+		for args, kwargs, *_ in self.get_test_values():
+			m = self.message_class(*args, **kwargs)
+
+			with self.subTest(args=args, kwargs=kwargs):
+				m.release()
 
 
 class GenericNoDataTest:
@@ -518,6 +544,14 @@ class BodyMessageTests(
 	"""
 	Tests for the Body message class
 	"""
+
+	def test_equality(self) -> None:
+		"""
+		Check equality comparison against another Body
+		"""
+		assert messages.Body(b"spam") == messages.Body(b"spam")
+		assert messages.Body(b"spam") != messages.Body(b"ham")
+		assert messages.Body(b"spam") != 1
 
 
 class EndOfMessageMessageTests(
