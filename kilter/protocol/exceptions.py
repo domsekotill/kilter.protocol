@@ -10,6 +10,9 @@ Exceptions raised by the package
 
 from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+	from .messages import Message
+
 __all__ = [
 	"InsufficientSpace", "NeedsMore", "UnexpectedMessage", "InvalidMessage",
 	"UnknownMessage",
@@ -58,6 +61,9 @@ class UnexpectedMessage(TypeError):
 	Raised by a protocol to indicate a message that is not expected in the current state
 	"""
 
+	if TYPE_CHECKING:
+		def __init__(self, message: Message): ...
+
 	def __str__(self) -> str:
 		return f"message was not expected by the protocol: {self.args[0]}"
 
@@ -66,3 +72,6 @@ class InvalidMessage(UnexpectedMessage):
 	"""
 	Raised by a protocol to indicate a message that is unknown to the state machine
 	"""
+
+	if TYPE_CHECKING:
+		def __init__(self, message: Message, event: Message|None = None): ...

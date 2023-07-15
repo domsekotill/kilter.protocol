@@ -271,7 +271,7 @@ class FilterProtocol:
 		if message.ident in UPDATE_RESPONSES and isinstance(event, messages.EndOfMessage):
 			return
 		if message.ident not in responses:
-			raise InvalidMessage(event, message)
+			raise InvalidMessage(message, event)
 		self.state = None
 
 	def _store_mta_flags(self, message: messages.Negotiate) -> None:
