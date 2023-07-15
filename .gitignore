@@ -8,3 +8,6 @@
 
 # Test results
 /results/
+
+# Dev tools caches (not all include automatic .gitignore)
+.*_cache/
