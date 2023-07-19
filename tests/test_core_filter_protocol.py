@@ -99,7 +99,6 @@ class FilterProtocolTests(unittest.TestCase):
 			for _ in FilterProtocol().read_from(buf):
 				pass
 
-	@unittest.expectedFailure
 	def test_no_response(self) -> None:
 		"""
 		Check that a following message can be read immediately when no response is expected
@@ -154,7 +153,6 @@ class FilterProtocolTests(unittest.TestCase):
 		else:
 			self.fail("Connect not read")
 
-	@unittest.expectedFailure
 	def test_write_unexpected_response_nr(self) -> None:
 		"""
 		Check that writing a message when no response is expected raises UnexpectedMessage
@@ -212,7 +210,6 @@ class FilterProtocolTests(unittest.TestCase):
 		else:
 			self.fail("Connect not read")
 
-	@unittest.expectedFailure
 	def test_write_disallowed_update(self) -> None:
 		"""
 		Check that writing updates without negotiation raises UnexpectedMessage
@@ -315,7 +312,6 @@ class FilterProtocolTests(unittest.TestCase):
 		else:
 			self.fail("Connect not read")
 
-	@unittest.expectedFailure
 	def test_disallowed_opts(self) -> None:
 		"""
 		Check that requesting protocol options not offered by the MTA results in ValueError
@@ -333,7 +329,6 @@ class FilterProtocolTests(unittest.TestCase):
 				Negotiate(6, 0x00, ProtocolFlags.MAX_DATA_SIZE_256K),
 			)
 
-	@unittest.expectedFailure
 	def test_disallowed_actions(self) -> None:
 		"""
 		Check that requesting protocol actions not offered by the MTA results in ValueError
@@ -351,7 +346,6 @@ class FilterProtocolTests(unittest.TestCase):
 				Negotiate(6, ActionFlags.CHANGE_BODY|ActionFlags.CHANGE_HEADERS, 0x00),
 			)
 
-	@unittest.expectedFailure
 	def test_unrequested_action(self) -> None:
 		"""
 		Check that sending an action that was not requested raises UnexpectedMessage
@@ -378,7 +372,6 @@ class FilterProtocolTests(unittest.TestCase):
 							ReplaceBody(b""),
 						)
 
-	@unittest.expectedFailure
 	def test_action(self) -> None:
 		"""
 		Check that sending an allowed modification action raised no issues
@@ -406,7 +399,6 @@ class FilterProtocolTests(unittest.TestCase):
 						)
 					assert len(warn_cm) == 0
 
-	@unittest.expectedFailure
 	def test_action_bad(self) -> None:
 		"""
 		Check that sending a disallowed message after EOM raises UnexpectedMessage
@@ -433,7 +425,6 @@ class FilterProtocolTests(unittest.TestCase):
 							Skip(),
 						)
 
-	@unittest.expectedFailure
 	def test_setsymlist_implicit(self) -> None:
 		"""
 		Check that sending a mapping of symbol lists sets SETSYMLIST and issues a warning
@@ -451,7 +442,6 @@ class FilterProtocolTests(unittest.TestCase):
 				Negotiate(6, 0x00, 0xfffff, {Stage.CONNECT: {"spam"}}),
 			)
 
-	@unittest.expectedFailure
 	def test_setsymlist_disallowed(self) -> None:
 		"""
 		Check that sending symbol lists when not offered by an MTA raises ValueError
@@ -469,7 +459,6 @@ class FilterProtocolTests(unittest.TestCase):
 				Negotiate(6, ActionFlags.SETSYMLIST, 0xfffff, {Stage.CONNECT: {"spam"}}),
 			)
 
-	@unittest.expectedFailure
 	def test_setsymlist_implicit_disallowed(self) -> None:
 		"""
 		Check that sending symbol lists when not offered by an MTA raises ValueError
