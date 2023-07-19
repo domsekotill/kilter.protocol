@@ -43,7 +43,7 @@ EventMessage: TypeAlias = Union[
 	Abort,
 ]
 """
-Messages sent from an MTA to a filter
+Messages sent from an MTA to a filter to indicate an event occurrence
 """
 
 ResponseMessage: TypeAlias = Union[
@@ -70,6 +70,25 @@ EditMessage: TypeAlias = Union[
 ]
 """
 Messages send from a filter to an MTA after an `EndOfMessage` to modify a message
+"""
+
+MTAMessage: TypeAlias = Union[
+	EventMessage,
+	Negotiate,
+	Close,
+]
+"""
+All messages that can be sent from an MTA to a filter
+"""
+
+FilterMessage: TypeAlias = Union[
+	ResponseMessage,
+	EditMessage,
+	Negotiate,
+	Skip,
+]
+"""
+All messages that can be sent from a filter to an MTA
 """
 
 
@@ -194,7 +213,7 @@ class FilterProtocol:
 	def read_from(
 		self,
 		buf: FixedSizeBuffer,
-	) -> Iterable[Negotiate|EventMessage|Close|Unimplemented]:
+	) -> Iterable[MTAMessage|Unimplemented]:
 		"""
 		Return an iterator yielding each complete message from a buffer
 
@@ -223,7 +242,7 @@ class FilterProtocol:
 	def write_to(
 		self,
 		buf: FixedSizeBuffer,
-		message: ResponseMessage|EditMessage|Negotiate|Skip,
+		message: FilterMessage,
 	) -> None:
 		"""
 		Validate and pack response and modification messages into a buffer

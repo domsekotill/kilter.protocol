@@ -10,6 +10,7 @@ import trio
 
 from kilter.protocol import messages
 from kilter.protocol.buffer import SimpleBuffer
+from kilter.protocol.core import FilterMessage
 from kilter.protocol.core import FilterProtocol
 from kilter.protocol.core import Unimplemented
 
@@ -40,7 +41,7 @@ async def process_client(client: trio.SocketStream, nursery: trio.Nursery) -> No
 
 	buf = SimpleBuffer(2**20)
 	proto = FilterProtocol()
-	send_channel, recv_channel = trio.open_memory_channel[messages.Message](4)
+	send_channel, recv_channel = trio.open_memory_channel[FilterMessage](4)
 	nursery.start_soon(client_sender, recv_channel, client, proto)
 
 	async with client:
@@ -70,7 +71,7 @@ async def process_client(client: trio.SocketStream, nursery: trio.Nursery) -> No
 
 
 async def client_sender(
-	channel: trio.MemoryReceiveChannel[messages.Message],
+	channel: trio.MemoryReceiveChannel[FilterMessage],
 	client: trio.SocketStream,
 	proto: FilterProtocol,
 ) -> None:
