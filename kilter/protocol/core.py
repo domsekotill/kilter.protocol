@@ -199,8 +199,8 @@ class FilterProtocol:
 	buffers.  The class checks the correctness of responses sent back to the MTA.
 	"""
 
-	def __init__(self, non_responders: Sequence[messages.Message] = []) -> None:
-		self.nr = {m.ident for m in non_responders}
+	def __init__(self) -> None:
+		self.nr = set[bytes]()
 		self.state: tuple[messages.Message, set[bytes]]|None = None
 
 	def read_from(
