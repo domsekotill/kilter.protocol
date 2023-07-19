@@ -214,8 +214,8 @@ class FilterProtocol:
 		self.nr = set[bytes]()
 		self.actions = set[bytes]([messages.Progress.ident])
 		self.state: tuple[messages.Message, set[bytes]]|None = None
-		self._optflags: int = 0
-		self._actflags: int = 0
+		self._optflags = ProtocolFlags(0)
+		self._actflags = ActionFlags(0)
 
 	def read_from(
 		self,
@@ -307,15 +307,15 @@ class FilterProtocol:
 		"""
 		# ActionFlag.SETSYMLIST must be set if Negotiate.macros is not empty
 		if message.macros:
-			if not ActionFlags.SETSYMLIST & message.action_flags:
+			if ActionFlags.SETSYMLIST not in message.action_flags:
 				message.action_flags |= ActionFlags.SETSYMLIST
 				warn(f"adding {ActionFlags.SETSYMLIST!r} to {message}", stacklevel=4)
-			if not ActionFlags.SETSYMLIST & self._actflags:
+			if ActionFlags.SETSYMLIST not in self._actflags:
 				raise ValueError("requesting symbols (macros) is not offered by the MTA")
 
-		if (flags := message.protocol_flags & ~self._optflags):
-			raise ValueError(f"requested options not offered by the MTA: {ProtocolFlags(flags)!r}")
-		if (flags := message.action_flags & ~self._actflags):
-			raise ValueError(f"requested actions not offered by the MTA: {ActionFlags(flags)!r}")
-		self.nr.update(ident for ident, flag in NR_FLAG_MAP.items() if flag & message.protocol_flags)
-		self.actions.update(ident for ident, flag in UPDATE_FLAG_MAP.items() if flag & message.action_flags)
+		if (pflags := message.protocol_flags & ~self._optflags):
+			raise ValueError(f"requested options not offered by the MTA: {pflags!r}")
+		if (aflags := message.action_flags & ~self._actflags):
+			raise ValueError(f"requested actions not offered by the MTA: {aflags!r}")
+		self.nr.update(ident for ident, flag in NR_FLAG_MAP.items() if flag in message.protocol_flags)
+		self.actions.update(ident for ident, flag in UPDATE_FLAG_MAP.items() if flag in message.action_flags)

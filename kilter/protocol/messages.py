@@ -143,6 +143,8 @@ class ActionFlags(BitField):
 	https://pythonhosted.org/pymilter/milter_api/smfi_register.html#flags
 	"""
 
+	NONE = 0x0
+
 	ADD_HEADERS = ADDHDRS = 0x1
 	CHANGE_HEADERS = CHGHDRS = 0x10
 	CHANGE_BODY = CHGBODY = 0x2
@@ -161,6 +163,8 @@ class ProtocolFlags(BitField):
 	The values correspond to the `SMFIP_*` codes described in
 	https://pythonhosted.org/pymilter/milter_api/xxfi_negotiate.html
 	"""
+
+	NONE = 0x0
 
 	NO_CONNECT = 0x1
 	NO_HELO = 0x2
@@ -380,9 +384,8 @@ class Negotiate(Message, ident=b"O"):
 
 	version: int
 
-	# TODO: use set[Enum]?
-	action_flags: int
-	protocol_flags: int
+	action_flags: ActionFlags
+	protocol_flags: ProtocolFlags
 
 	macros: Mapping[Stage, Collection[str]] = field(default_factory=dict)
 
@@ -390,14 +393,14 @@ class Negotiate(Message, ident=b"O"):
 
 	@classmethod
 	def from_buffer(cls, buf: memoryview) -> Self:
-		opts = cast(tuple[int, int, int], cls._struct.unpack_from(buf))
+		version, actions, options = cast(tuple[int, int, int], cls._struct.unpack_from(buf))
 		buf = buf[cls._struct.size:]
 		macros = dict()
 		while len(buf) > 0:
 			stage, *_ = LONG.unpack_from(buf)
 			names, buf = split_cstring(buf[LONG.size:])
-			macros[Stage(stage)] = names.tobytes().decode("utf-8").split()
-		return cls(*opts, macros)
+			macros[Stage(stage)] = str(names, "utf-8").split()
+		return cls(version, ActionFlags(actions), ProtocolFlags(options), macros)
 
 	def to_buffer(self, buf: FixedSizeBuffer) -> None:
 		self._struct.pack_into(

@@ -17,6 +17,9 @@ from kilter.protocol.exceptions import UnknownMessage
 from kilter.protocol.messages import NoDataMessage
 from kilter.protocol.messages import *
 
+ALL_ACTION_FLAGS = ActionFlags(0x1ff)
+ALL_PROTOCOL_FLAGS = ProtocolFlags(0xfffff)
+
 
 class FilterProtocolTests(unittest.TestCase):
 	"""
@@ -29,7 +32,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(100)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 		Macro(b"\x00", dict(spam="ham")).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 
@@ -40,7 +43,7 @@ class FilterProtocolTests(unittest.TestCase):
 				case Negotiate():
 					protocol.write_to(
 						SimpleBuffer(20),
-						Negotiate(6, 0x01, 0x11f),
+						Negotiate(6, ActionFlags.ADD_HEADERS, ProtocolFlags(0x13e)),
 					)
 				case Connect():
 					protocol.write_to(
@@ -79,7 +82,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(100)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 		Macro(b"\x00", dict(spam="ham")).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 
@@ -105,7 +108,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(100)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 		Helo("example.com").pack(buf)
 
@@ -116,7 +119,7 @@ class FilterProtocolTests(unittest.TestCase):
 				case Negotiate():
 					protocol.write_to(
 						SimpleBuffer(20),
-						Negotiate(6, 0x00, ProtocolFlags.NR_CONNECT),
+						Negotiate(6, ActionFlags.NONE, ProtocolFlags.NR_CONNECT),
 					)
 				case Connect():
 					pass
@@ -127,7 +130,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(100)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 
 		protocol = FilterProtocol()
@@ -137,7 +140,7 @@ class FilterProtocolTests(unittest.TestCase):
 				case Negotiate():
 					protocol.write_to(
 						SimpleBuffer(20),
-						Negotiate(6, 0x00, 0x00),
+						Negotiate(6, ActionFlags.NONE, ProtocolFlags.NONE),
 					)
 				case Connect():
 					protocol.write_to(
@@ -159,7 +162,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(100)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 
 		protocol = FilterProtocol()
@@ -169,7 +172,7 @@ class FilterProtocolTests(unittest.TestCase):
 				case Negotiate():
 					protocol.write_to(
 						SimpleBuffer(20),
-						Negotiate(6, 0x00, ProtocolFlags.NR_CONNECT),
+						Negotiate(6, ActionFlags.NONE, ProtocolFlags.NR_CONNECT),
 					)
 				case Connect():
 					with self.assertRaises(UnexpectedMessage):
@@ -187,7 +190,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(100)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 		Helo("example.com").pack(buf)
 
@@ -198,7 +201,7 @@ class FilterProtocolTests(unittest.TestCase):
 				case Negotiate():
 					protocol.write_to(
 						SimpleBuffer(20),
-						Negotiate(6, ActionFlags.ADD_HEADERS, 0x00),
+						Negotiate(6, ActionFlags.ADD_HEADERS, ProtocolFlags.NONE),
 					)
 				case Connect():
 					with self.assertRaises(UnexpectedMessage):
@@ -216,7 +219,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(100)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 		Helo("example.com").pack(buf)
 		Data().pack(buf)
@@ -230,7 +233,7 @@ class FilterProtocolTests(unittest.TestCase):
 				case Negotiate():
 					protocol.write_to(
 						SimpleBuffer(20),
-						Negotiate(6, 0x00, 0x00),
+						Negotiate(6, ActionFlags.NONE, ProtocolFlags.NONE),
 					)
 				case EndOfMessage():
 					with self.assertRaises(UnexpectedMessage):
@@ -253,7 +256,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(100)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 		Helo("example.com").pack(buf)
 		Data().pack(buf)
@@ -267,7 +270,7 @@ class FilterProtocolTests(unittest.TestCase):
 				case Negotiate():
 					protocol.write_to(
 						SimpleBuffer(20),
-						Negotiate(6, ActionFlags.ADD_HEADERS, 0x00),
+						Negotiate(6, ActionFlags.ADD_HEADERS, ProtocolFlags.NONE),
 					)
 				case EndOfMessage():
 					protocol.write_to(
@@ -290,7 +293,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(100)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 
 		protocol = FilterProtocol()
@@ -300,7 +303,7 @@ class FilterProtocolTests(unittest.TestCase):
 				case Negotiate():
 					protocol.write_to(
 						SimpleBuffer(20),
-						Negotiate(6, ActionFlags.ADD_HEADERS, 0x00),
+						Negotiate(6, ActionFlags.ADD_HEADERS, ProtocolFlags.NONE),
 					)
 				case Connect():
 					with self.assertRaises(InvalidMessage):
@@ -318,7 +321,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(20)
-		Negotiate(6, 0x1ff, ProtocolFlags.MAX_DATA_SIZE_1M).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ProtocolFlags.MAX_DATA_SIZE_1M).pack(buf)
 
 		protocol = FilterProtocol()
 		next(protocol.read_from(buf))  # Prime the state machine
@@ -326,7 +329,7 @@ class FilterProtocolTests(unittest.TestCase):
 		with self.assertRaises(ValueError):
 			protocol.write_to(
 				SimpleBuffer(20),
-				Negotiate(6, 0x00, ProtocolFlags.MAX_DATA_SIZE_256K),
+				Negotiate(6, ActionFlags.NONE, ProtocolFlags.MAX_DATA_SIZE_256K),
 			)
 
 	def test_disallowed_actions(self) -> None:
@@ -335,7 +338,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(20)
-		Negotiate(6, 0x1ff & ~ActionFlags.CHANGE_BODY, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS & ~ActionFlags.CHANGE_BODY, ALL_PROTOCOL_FLAGS).pack(buf)
 
 		protocol = FilterProtocol()
 		next(protocol.read_from(buf))  # Prime the state machine
@@ -343,7 +346,7 @@ class FilterProtocolTests(unittest.TestCase):
 		with self.assertRaises(ValueError):
 			protocol.write_to(
 				SimpleBuffer(20),
-				Negotiate(6, ActionFlags.CHANGE_BODY|ActionFlags.CHANGE_HEADERS, 0x00),
+				Negotiate(6, ActionFlags.CHANGE_BODY|ActionFlags.CHANGE_HEADERS, ProtocolFlags.NONE),
 			)
 
 	def test_unrequested_action(self) -> None:
@@ -352,7 +355,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(60)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 		EndOfMessage(b"").pack(buf)
 
@@ -363,7 +366,7 @@ class FilterProtocolTests(unittest.TestCase):
 				case Negotiate():
 					protocol.write_to(
 						SimpleBuffer(20),
-						Negotiate(6, 0x00, 0xfffff),
+						Negotiate(6, ActionFlags.NONE, ALL_PROTOCOL_FLAGS),
 					)
 				case EndOfMessage():
 					with self.assertRaises(UnexpectedMessage):
@@ -378,7 +381,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(60)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 		EndOfMessage(b"").pack(buf)
 
@@ -389,7 +392,7 @@ class FilterProtocolTests(unittest.TestCase):
 				case Negotiate():
 					protocol.write_to(
 						SimpleBuffer(20),
-						Negotiate(6, 0x1ff, 0xfffff),
+						Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS),
 					)
 				case EndOfMessage():
 					with catch_warnings(record=True) as warn_cm:
@@ -405,7 +408,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(60)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 		EndOfMessage(b"").pack(buf)
 
@@ -416,7 +419,7 @@ class FilterProtocolTests(unittest.TestCase):
 				case Negotiate():
 					protocol.write_to(
 						SimpleBuffer(20),
-						Negotiate(6, 0x1ff, 0xfffff),
+						Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS),
 					)
 				case EndOfMessage():
 					with self.assertRaises(UnexpectedMessage):
@@ -431,7 +434,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(20)
-		Negotiate(6, 0x1ff, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
 
 		protocol = FilterProtocol()
 		next(protocol.read_from(buf))  # Prime the state machine
@@ -439,7 +442,7 @@ class FilterProtocolTests(unittest.TestCase):
 		with self.assertWarns(UserWarning):
 			protocol.write_to(
 				SimpleBuffer(40),
-				Negotiate(6, 0x00, 0xfffff, {Stage.CONNECT: {"spam"}}),
+				Negotiate(6, ActionFlags.NONE, ALL_PROTOCOL_FLAGS, {Stage.CONNECT: {"spam"}}),
 			)
 
 	def test_setsymlist_disallowed(self) -> None:
@@ -448,7 +451,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(20)
-		Negotiate(6, 0x1ff & ~ActionFlags.SETSYMLIST, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS & ~ActionFlags.SETSYMLIST, ALL_PROTOCOL_FLAGS).pack(buf)
 
 		protocol = FilterProtocol()
 		next(protocol.read_from(buf))  # Prime the state machine
@@ -456,7 +459,7 @@ class FilterProtocolTests(unittest.TestCase):
 		with self.assertRaises(ValueError):
 			protocol.write_to(
 				SimpleBuffer(40),
-				Negotiate(6, ActionFlags.SETSYMLIST, 0xfffff, {Stage.CONNECT: {"spam"}}),
+				Negotiate(6, ActionFlags.SETSYMLIST, ALL_PROTOCOL_FLAGS, {Stage.CONNECT: {"spam"}}),
 			)
 
 	def test_setsymlist_implicit_disallowed(self) -> None:
@@ -465,7 +468,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		# Prepare input messages
 		buf = SimpleBuffer(20)
-		Negotiate(6, 0x1ff & ~ActionFlags.SETSYMLIST, 0xfffff).pack(buf)
+		Negotiate(6, ALL_ACTION_FLAGS & ~ActionFlags.SETSYMLIST, ALL_PROTOCOL_FLAGS).pack(buf)
 
 		protocol = FilterProtocol()
 		next(protocol.read_from(buf))  # Prime the state machine
@@ -473,5 +476,5 @@ class FilterProtocolTests(unittest.TestCase):
 		with self.assertWarns(UserWarning), self.assertRaises(ValueError):
 			protocol.write_to(
 				SimpleBuffer(40),
-				Negotiate(6, 0x00, 0xfffff, {Stage.CONNECT: {"spam"}}),
+				Negotiate(6, ActionFlags.NONE, ALL_PROTOCOL_FLAGS, {Stage.CONNECT: {"spam"}}),
 			)

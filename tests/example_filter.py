@@ -53,7 +53,7 @@ async def process_client(client: trio.SocketStream, nursery: trio.Nursery) -> No
 				logging.info(f"RECEIVED {message!r}")
 				match message:
 					case messages.Negotiate():
-						message.protocol_flags = 0
+						message.protocol_flags = messages.ProtocolFlags.NONE
 						await send_channel.send(message)
 					case messages.Macro() | messages.Abort() | messages.Close():
 						continue
