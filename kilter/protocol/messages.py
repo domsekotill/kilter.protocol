@@ -23,6 +23,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from dataclasses import field
 from enum import Enum
+from enum import IntFlag
 from ipaddress import IPv4Address
 from ipaddress import IPv6Address
 from ipaddress import ip_address
@@ -117,7 +118,7 @@ class Stage(int, Enum):
 BFSelf = TypeVar("BFSelf", bound="BitField")
 
 
-class BitField(int, Enum):
+class BitField(IntFlag):
 	"""
 	Base class for bit-field enums like ActionFlags and ProtocolFlags
 	"""
