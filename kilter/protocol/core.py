@@ -14,7 +14,7 @@ Choosing messages to transmit to an MTA is left to a higher level, as is handlin
 
 from __future__ import annotations
 
-from typing import Iterable
+from typing import Iterator
 from typing import Sequence
 from typing import TypeAlias
 from typing import Union
@@ -206,7 +206,7 @@ class FilterProtocol:
 	def read_from(
 		self,
 		buf: FixedSizeBuffer,
-	) -> Iterable[MTAMessage]:
+	) -> Iterator[MTAMessage]:
 		"""
 		Return an iterator yielding each complete message from a buffer
 
