@@ -210,7 +210,8 @@ class FilterProtocol:
 	buffers.  The class checks the correctness of responses sent back to the MTA.
 	"""
 
-	def __init__(self) -> None:
+	def __init__(self, *, abort_on_unknown: bool = False) -> None:
+		self.abort_on_unknown = abort_on_unknown
 		self.nr = set[bytes]()
 		self.actions = set[bytes]([messages.Progress.ident])
 		self.state: tuple[messages.Message, set[bytes]]|None = None
@@ -236,7 +237,9 @@ class FilterProtocol:
 				return
 			except UnknownMessage as exc:
 				del buf[:len(exc.contents)]
-				raise
+				if not self.abort_on_unknown:
+					raise
+				yield Abort()
 			else:
 				yield self._check_recv(message)
 				message.release()

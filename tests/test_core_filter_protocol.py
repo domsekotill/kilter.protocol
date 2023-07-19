@@ -76,6 +76,19 @@ class FilterProtocolTests(unittest.TestCase):
 
 		assert exc_cm.exception.contents == msg
 
+	def test_read_unimplemented_abort(self) -> None:
+		"""
+		Check that unknown messages cause Abort to be returned when enabled
+		"""
+		buf = SimpleBuffer(20)
+		buf[:] = b"\x00\x00\x00\x01S"
+
+		for msg in FilterProtocol(abort_on_unknown=True).read_from(buf):
+			assert isinstance(msg, Abort)
+			break
+		else:
+			self.fail("No messages read")
+
 	def test_read_unexpected(self) -> None:
 		"""
 		Check that reading an available message before a response raises UnexpectedMessage
