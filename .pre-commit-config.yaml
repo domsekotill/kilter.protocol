@@ -76,7 +76,6 @@ repos:
   rev: v3.0.0
   hooks:
   - id: add-trailing-comma
-    args: [--py36-plus]
     types: []
     types_or: [python, pyi]
     stages: [commit, manual]
