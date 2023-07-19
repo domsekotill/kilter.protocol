@@ -64,7 +64,7 @@ class UnexpectedMessage(TypeError):
 	if TYPE_CHECKING:
 		def __init__(self, message: Message): ...
 
-	def __str__(self) -> str:
+	def __str__(self) -> str:  # pragma: no-cover
 		return f"message was not expected by the protocol: {self.args[0]}"
 
 
