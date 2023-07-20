@@ -83,7 +83,7 @@ makes writing a third-party parser difficult.
   https://code.kodo.org.uk/kilter/kilter.protocol/badges/main/coverage.svg
 
 [coverage report]:
-  https://code.kodo.org.uk/kilter/kilter.protocol/-/jobs/artifacts/main/file/results/coverage/index.html?job=Unit+Tests
+  https://code.kodo.org.uk/kilter/kilter.protocol/-/jobs/artifacts/main/file/results/coverage.html.d/index.html?job=Unit+Tests
 
 
 Usage
