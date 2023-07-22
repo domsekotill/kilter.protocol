@@ -238,18 +238,18 @@ class Message(metaclass=ABCMeta):
 	>>> del buf[:10]
 	"""
 
-	ident: ClassVar[bytes]
+	ident: ClassVar[int]
 
-	_message_classes = dict[bytes, "type[Message]"]()
-	_hdr_struct = Struct("!lc")
+	_message_classes = dict[int, "type[Message]"]()
+	_hdr_struct = Struct("!LB")
 
 	@classmethod
 	def __init_subclass__(cls, /, ident: bytes = b""):
 		super().__init_subclass__()
 		if ident:  # pragma: no-branch
 			assert len(ident) == 1
-			Message._message_classes[ident] = cls
-			cls.ident = ident
+			cls.ident = ident[0]
+			Message._message_classes[cls.ident] = cls
 
 	@classmethod
 	def unpack(cls, buf: FixedSizeBuffer) -> tuple[Message, int]:
@@ -261,7 +261,7 @@ class Message(metaclass=ABCMeta):
 			raise NeedsMore
 		size, ident = cls._hdr_struct.unpack_from(buf[:])
 		assert isinstance(size, int)
-		assert isinstance(ident, bytes)
+		assert isinstance(ident, int)
 		end = hdr_size + size - 1
 		if buf.filled < end:
 			raise NeedsMore

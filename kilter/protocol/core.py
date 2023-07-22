@@ -212,9 +212,9 @@ class FilterProtocol:
 
 	def __init__(self, *, abort_on_unknown: bool = False) -> None:
 		self.abort_on_unknown = abort_on_unknown
-		self.nr = set[bytes]()
-		self.actions = set[bytes]([messages.Progress.ident])
-		self.state: tuple[messages.Message, set[bytes]]|None = None
+		self.nr = set[int]()
+		self.actions = set[int]([messages.Progress.ident])
+		self.state: tuple[messages.Message, set[int]]|None = None
 		self._optflags = ProtocolFlags(0)
 		self._actflags = ActionFlags(0)
 
