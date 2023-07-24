@@ -33,7 +33,7 @@ class FilterProtocolTests(unittest.TestCase):
 		# Prepare input messages
 		buf = SimpleBuffer(100)
 		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
-		Macro(b"\x00", dict(spam="ham")).pack(buf)
+		Macro(0, dict(spam="ham")).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 
 		protocol = FilterProtocol()
@@ -96,7 +96,7 @@ class FilterProtocolTests(unittest.TestCase):
 		# Prepare input messages
 		buf = SimpleBuffer(100)
 		Negotiate(6, ALL_ACTION_FLAGS, ALL_PROTOCOL_FLAGS).pack(buf)
-		Macro(b"\x00", dict(spam="ham")).pack(buf)
+		Macro(0, dict(spam="ham")).pack(buf)
 		Connect("example.com", IPv4Address("10.1.1.1"), 11111).pack(buf)
 
 		with self.assertRaises(UnexpectedMessage):

@@ -340,18 +340,18 @@ class MacroMessageTests(
 		Return test values for generic message tests, appropriate for Macro
 		"""
 		yield (
-			(b"C", {}), dict(),
-			dict(stage=b"C", macros=dict()),
+			(ord("C"), {}), dict(),
+			dict(stage=ord("C"), macros=dict()),
 			b"C",
 		)
 		yield (
-			(b"H",), dict(macros=dict(spam="ham", eggs="green")),
-			dict(stage=b"H", macros=dict(spam="ham", eggs="green")),
+			(ord("H"),), dict(macros=dict(spam="ham", eggs="green")),
+			dict(stage=ord("H"), macros=dict(spam="ham", eggs="green")),
 			b"Hspam\x00ham\x00eggs\x00green\x00",
 		)
 		yield (
-			tuple(), dict(stage=b"M", macros=dict(spam="ham", eggs="green")),
-			dict(stage=b"M", macros=dict(spam="ham", eggs="green")),
+			tuple(), dict(stage=ord("M"), macros=dict(spam="ham", eggs="green")),
+			dict(stage=ord("M"), macros=dict(spam="ham", eggs="green")),
 			b"Mspam\x00ham\x00eggs\x00green\x00",
 		)
 

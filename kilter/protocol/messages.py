@@ -423,10 +423,10 @@ class Macro(Message, ident=b"D"):
 	A message type for transferring symbol mappings prior to a stage event
 	"""
 
-	stage: bytes
+	stage: int
 	macros: Mapping[str, str]
 
-	_struct = Struct("!c")
+	_struct = Struct("!B")
 
 	@classmethod
 	def from_buffer(cls, buf: memoryview) -> Self:
