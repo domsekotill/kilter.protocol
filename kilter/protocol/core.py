@@ -212,6 +212,7 @@ class FilterProtocol:
 
 	def __init__(self, *, abort_on_unknown: bool = False) -> None:
 		self.abort_on_unknown = abort_on_unknown
+		self.skip = False
 		self.nr = set[int]()
 		self.actions = set[int]([messages.Progress.ident])
 		self.state: tuple[messages.Message, set[int]]|None = None
@@ -292,6 +293,8 @@ class FilterProtocol:
 				raise UnexpectedMessage(message)
 		if message.ident not in responses:
 			raise InvalidMessage(message, event)
+		if message.ident == Skip.ident and not self.skip:
+			raise UnexpectedMessage(message)
 		self.state = None
 
 	def _store_mta_flags(self, message: messages.Negotiate) -> None:
@@ -320,5 +323,6 @@ class FilterProtocol:
 			raise ValueError(f"requested options not offered by the MTA: {pflags!r}")
 		if (aflags := message.action_flags & ~self._actflags):
 			raise ValueError(f"requested actions not offered by the MTA: {aflags!r}")
+		self.skip = ProtocolFlags.SKIP in message.protocol_flags
 		self.nr.update(ident for ident, flag in NR_FLAG_MAP.items() if flag in message.protocol_flags)
 		self.actions.update(ident for ident, flag in UPDATE_FLAG_MAP.items() if flag in message.action_flags)
