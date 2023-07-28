@@ -268,14 +268,13 @@ class FilterProtocol:
 			responses = MTA_EVENT_RESPONSES[message.ident]
 		except KeyError:
 			raise InvalidMessage(message)
-		else:
-			assert isinstance(
-				message,
-				(
-					Negotiate, Macro, Connect, Helo, EnvelopeFrom, EnvelopeRecipient, Data,
-					Unknown, Header, EndOfHeaders, Body, EndOfMessage, Abort, Close,
-				),
-			)
+		assert isinstance(
+			message,
+			(
+				Negotiate, Macro, Connect, Helo, EnvelopeFrom, EnvelopeRecipient, Data,
+				Unknown, Header, EndOfHeaders, Body, EndOfMessage, Abort, Close,
+			),
+		)
 		if responses is not None and message.ident not in self.nr:
 			self.state = message, responses
 		return message
