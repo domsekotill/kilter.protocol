@@ -219,6 +219,20 @@ class FilterProtocol:
 		self._optflags = ProtocolFlags(0)
 		self._actflags = ActionFlags(0)
 
+	def needs_response(self, message: MTAMessage) -> bool:
+		"""
+		Return whether the message from an MTA requires a response
+
+		There answer to whether a response is required will rely in part on the options
+		negotiated with the MTA.
+		"""
+		match message:
+			case Negotiate():
+				return True
+			case Macro()|Abort()|Close():
+				return False
+		return message.ident not in self.nr
+
 	def read_from(
 		self,
 		buf: FixedSizeBuffer,
