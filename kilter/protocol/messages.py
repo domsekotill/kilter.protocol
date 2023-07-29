@@ -144,6 +144,7 @@ class ActionFlags(BitField):
 	"""
 
 	NONE = 0x0
+	ALL = 0x1ff
 
 	ADD_HEADERS = ADDHDRS = 0x1
 	CHANGE_HEADERS = CHGHDRS = 0x10
