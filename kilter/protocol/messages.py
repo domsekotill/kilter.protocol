@@ -46,7 +46,7 @@ if TYPE_CHECKING:
 LONG = Struct("!L")
 
 __all__ = [
-	"Family", "Stage", "BitField", "ActionFlags", "ProtocolFlags",
+	"Family", "Stage", "ActionFlags", "ProtocolFlags",
 	"Message", "Negotiate", "Macro", "Connect", "Helo", "EnvelopeFrom",
 	"EnvelopeRecipient", "Data", "Unknown", "Header", "EndOfHeaders", "Body",
 	"EndOfMessage", "Abort", "Close", "Continue", "Reject", "Discard", "Accept",
@@ -115,27 +115,7 @@ class Stage(int, Enum):
 	END_HEADERS = 6
 
 
-BFSelf = TypeVar("BFSelf", bound="BitField")
-
-
-class BitField(IntFlag):
-	"""
-	Base class for bit-field enums like ActionFlags and ProtocolFlags
-	"""
-
-	@classmethod
-	def pack(cls: type[BFSelf], flags: Iterable[BFSelf]) -> int:
-		rflag = 0
-		for flag in flags:
-			rflag |= flag
-		return rflag
-
-	@classmethod
-	def unpack(cls: type[BFSelf], bitfield: int) -> set[BFSelf]:
-		return {flag for flag in cls if flag & bitfield}
-
-
-class ActionFlags(BitField):
+class ActionFlags(IntFlag):
 	"""
 	Bit-field values for the `Negotiate.action_flags` field of the `Negotiate` message
 
@@ -157,7 +137,7 @@ class ActionFlags(BitField):
 	SETSYMLIST = 0x100
 
 
-class ProtocolFlags(BitField):
+class ProtocolFlags(IntFlag):
 	"""
 	Bit-field values for the `Negotiate.protocol_flags` field of the `Negotiate` message
 
