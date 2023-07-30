@@ -96,7 +96,7 @@ repos:
   rev: v1.4.1
   hooks:
   - id: mypy
-    args: [--follow-imports=silent, kilter/protocol, tests]
+    args: [kilter/protocol, tests]
     pass_filenames: false
     additional_dependencies:
     - trio-typing
