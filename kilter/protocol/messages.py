@@ -338,7 +338,7 @@ class BytesMessage(Message):
 
 	content: memoryview
 
-	def __init__(self, content: bytes):
+	def __init__(self, content: bytes|memoryview):
 		self.content = memoryview(content).toreadonly()
 
 	def __repr__(self) -> str:
@@ -521,8 +521,8 @@ class EnvelopeFrom(Message, ident=b"M"):
 	An event message reporting a client sent an SMTP "MAIL FROM" command
 	"""
 
-	sender: bytes
-	arguments: list[bytes] = field(default_factory=list)
+	sender: bytes|memoryview
+	arguments: list[bytes|memoryview] = field(default_factory=list)
 
 	@classmethod
 	def from_buffer(cls, buf: memoryview) -> Self:
@@ -558,8 +558,8 @@ class EnvelopeRecipient(Message, ident=b"R"):
 	A client must send at least one "RCPT TO" command, and can send multiple.
 	"""
 
-	recipient: bytes
-	arguments: list[bytes] = field(default_factory=list)
+	recipient: bytes|memoryview
+	arguments: list[bytes|memoryview] = field(default_factory=list)
 
 	@classmethod
 	def from_buffer(cls, buf: memoryview) -> Self:
@@ -611,7 +611,7 @@ class Header(Message, ident=b"L"):
 	"""
 
 	name: str
-	value: bytes
+	value: bytes|memoryview
 
 	@classmethod
 	def from_buffer(cls, buf: memoryview) -> Self:
@@ -773,7 +773,7 @@ class ChangeHeader(Message, ident=b"m"):
 
 	index: int
 	name: str
-	value: bytes
+	value: bytes|memoryview
 
 	@classmethod
 	def from_buffer(cls, buf: memoryview) -> Self:
