@@ -302,6 +302,17 @@ class Message(metaclass=ABCMeta):
 		value that could be a memoryview.
 		"""
 
+	def freeze(self) -> None:
+		"""
+		Similar to `release()`, but memoryviews are replaced with byte object copies
+
+		Users may call this to copy data from a buffer for later reading, for instance if
+		they intend to store messages and process them at a later stage.
+
+		Concrete classes MUST implement this if they store references to memoryviews, or any
+		value that could be a memoryview.
+		"""
+
 
 class NoDataMessage(Message):
 	"""
@@ -349,6 +360,9 @@ class BytesMessage(Message):
 
 	def release(self) -> None:
 		self.content.release()
+
+	def freeze(self) -> None:
+		self.content = memoryview(self.content.tobytes())
 
 
 # MTA Setup Commands
@@ -527,6 +541,14 @@ class EnvelopeFrom(Message, ident=b"M"):
 			if isinstance(arg, memoryview):
 				arg.release()
 
+	def freeze(self) -> None:
+		if isinstance(self.sender, memoryview):
+			self.sender = self.sender.tobytes()
+		self.arguments[:] = (
+			arg.tobytes() if isinstance(arg, memoryview) else arg
+			for arg in self.arguments
+		)
+
 
 @dataclass
 class EnvelopeRecipient(Message, ident=b"R"):
@@ -555,6 +577,14 @@ class EnvelopeRecipient(Message, ident=b"R"):
 		for arg in self.arguments:
 			if isinstance(arg, memoryview):
 				arg.release()
+
+	def freeze(self) -> None:
+		if isinstance(self.recipient, memoryview):
+			self.recipient = self.recipient.tobytes()
+		self.arguments[:] = (
+			arg.tobytes() if isinstance(arg, memoryview) else arg
+			for arg in self.arguments
+		)
 
 
 class Data(NoDataMessage, ident=b"T"):
@@ -597,6 +627,10 @@ class Header(Message, ident=b"L"):
 	def release(self) -> None:
 		if isinstance(self.value, memoryview):
 			self.value.release()
+
+	def freeze(self) -> None:
+		if isinstance(self.value, memoryview):
+			self.value = self.value.tobytes()
 
 
 class EndOfHeaders(NoDataMessage, ident=b"N"):
@@ -757,6 +791,10 @@ class ChangeHeader(Message, ident=b"m"):
 	def release(self) -> None:
 		if isinstance(self.value, memoryview):
 			self.value.release()
+
+	def freeze(self) -> None:
+		if isinstance(self.value, memoryview):
+			self.value = self.value.tobytes()
 
 
 class InsertHeader(ChangeHeader, ident=b"i"):

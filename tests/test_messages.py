@@ -265,6 +265,34 @@ class GenericTests(TestCaseMixin, Protocol[T]):
 			with self.subTest(args=args, kwargs=kwargs):
 				m.release()
 
+	def test_buffer_freeze(self) -> None:
+		"""
+		Check that freezing a message that holds memoryviews works
+		"""
+		buf = SimpleBuffer(100)
+		for *_, attr, example in self.get_test_values():
+			buf[0:] = struct.pack("!lc", len(example) + 1, self.message_ident)
+			buf[:] = example
+			buf[:] = b"spam"  # needed to make the deletion do a resize
+			m, s = messages.Message.unpack(buf)
+
+			with self.subTest(attr=attr):
+				m.freeze()
+				del buf[:s-5]
+
+				for name, val in attr.items():
+					assert getattr(m, name) == val
+
+	def test_buffer_freeze_noop(self) -> None:
+		"""
+		Check that releasing a message that holds no memoryviews works
+		"""
+		for args, kwargs, *_ in self.get_test_values():
+			m = self.message_class(*args, **kwargs)
+
+			with self.subTest(args=args, kwargs=kwargs):
+				m.freeze()
+
 
 class GenericNoDataTest:
 	"""
