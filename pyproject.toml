@@ -51,23 +51,12 @@ ignore_init = true
 
 [tool.flakeheaven]
 base = "https://code.kodo.org.uk/dom/project-templates/-/raw/main/.flakerules.toml"
-max_line_length = 92
-max_doc_length = 92
-
-[tool.flakeheaven.plugins]
-pycodestyle = ["-E701", "-E226"]
 
 [tool.flakeheaven.exceptions."kilter/protocol/messages.py"]
 flake8-docstrings = ["-D102"]
 
-[tool.flakeheaven.exceptions."tests/"]
-flake8-docstrings = ["-D100"]
-
 [tool.flakeheaven.exceptions."tests/unittest_helpers.py"]
 flake8-docstrings = ["-D10*"]
-
-[tool.flakeheaven.exceptions."doc/*"]
-flake8-docstrings = ["-*"]
 
 
 [tool.mypy]
@@ -102,16 +91,17 @@ plugins = [
 precision = 2
 skip_empty = true
 exclude_lines = [
-	"pragma: no-cover",
-	"if .*\\b__name__\\b",
-	"if .*\\bTYPE_CHECKING\\b",
+	"@(abc\\.)abstractmethod",
+	"@overload",
 	"class .*(.*\\bProtocol\\b.*):",
 	"def __repr__",
-	"@overload",
+	"if .*\\bTYPE_CHECKING\\b",
+	"if .*\\b__name__\\b",
+	"pragma: no-cover",
 ]
 partial_branches = [
-	"pragma: no-branch",
 	"if .*\\b__debug__\\b",
+	"pragma: no-branch",
 ]
 
 [tool.coverage.json]
