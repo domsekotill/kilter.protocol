@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Dominik Sekotill <dom.sekotill@kodo.org.uk>
+# Copyright 2022-2024 Dominik Sekotill <dom.sekotill@kodo.org.uk>
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from abc import ABCMeta
 from abc import abstractmethod
+from codecs import decode
 from collections.abc import Collection
 from collections.abc import Iterable
 from collections.abc import Iterator
@@ -417,7 +418,7 @@ class Macro(Message, ident=b"D"):
 			while len(buf) > 0:
 				key, buf = split_cstring(buf)
 				val, buf = split_cstring(buf)
-				macros[key.tobytes().decode("ascii")] = val.tobytes().decode("ascii")
+				macros[decode(key, "ascii")] = decode(val, "ascii")
 		return cls(stage, macros)
 
 	def to_buffer(self, buf: FixedSizeBuffer) -> None:
@@ -452,7 +453,7 @@ class Connect(Message, ident=b"C"):
 	@classmethod
 	def from_buffer(cls, buf: memoryview) -> Self:
 		_hostname, buf = split_cstring(buf)
-		hostname = _hostname.tobytes().decode("idna")
+		hostname = decode(_hostname, "idna")
 		family, buf = Family(buf[0:1].tobytes()), buf[1:]
 		if family == Family.UNKNOWN:
 			return cls(hostname)
@@ -494,7 +495,7 @@ class Helo(Message, ident=b"H"):
 	@classmethod
 	def from_buffer(cls, buf: memoryview) -> Self:
 		hostname, _ = split_cstring(buf)
-		return cls(hostname.tobytes().decode("idna"))
+		return cls(decode(hostname, "idna"))
 
 	def to_buffer(self, buf: FixedSizeBuffer) -> None:
 		write_cstring(buf, self.hostname.encode("idna"))
@@ -587,7 +588,7 @@ class Header(Message, ident=b"L"):
 		name, buf = split_cstring(buf)
 		value, buf = split_cstring(buf)
 		assert len(buf) == 0
-		return cls(name.tobytes().decode("ascii"), value)
+		return cls(decode(name, "ascii"), value)
 
 	def to_buffer(self, buf: FixedSizeBuffer) -> None:
 		write_cstring(buf, self.name.encode("ascii"))
@@ -689,7 +690,7 @@ class _AddrCmd(Message):
 	def from_buffer(cls, buf: memoryview) -> Self:
 		address, buf = split_cstring(buf)
 		assert len(buf) == 0
-		return cls(address.tobytes().decode("utf-8"))
+		return cls(decode(address, "utf-8"))
 
 	def to_buffer(self, buf: FixedSizeBuffer) -> None:
 		write_cstring(buf, self.address.encode("utf-8"))
@@ -712,8 +713,8 @@ class _AddrParCmd(Message):
 			args, buf = split_cstring(buf)
 		assert len(buf) == 0
 		return cls(
-			address.tobytes().decode("utf-8"),
-			None if args is None else args.tobytes().decode("utf-8"),
+			decode(address, "utf-8"),
+			None if args is None else decode(args, "utf-8"),
 		)
 
 	def to_buffer(self, buf: FixedSizeBuffer) -> None:
@@ -746,7 +747,7 @@ class ChangeHeader(Message, ident=b"m"):
 		name, buf = split_cstring(buf[LONG.size:])
 		value, buf = split_cstring(buf)
 		assert len(buf) == 0
-		return cls(index, name.tobytes().decode("ascii"), value)
+		return cls(index, decode(name, "ascii"), value)
 
 	def to_buffer(self, buf: FixedSizeBuffer) -> None:
 		LONG.pack_into(buf.get_free(LONG.size), 0, self.index)
@@ -812,7 +813,7 @@ class Quarantine(Message, ident=b"q"):
 	def from_buffer(cls, buf: memoryview) -> Self:
 		reason, buf = split_cstring(buf)
 		assert len(buf) == 0
-		return cls(reason.tobytes().decode("utf-8"))
+		return cls(decode(reason, "utf-8"))
 
 	def to_buffer(self, buf: FixedSizeBuffer) -> None:
 		write_cstring(buf, self.reason.encode("utf-8"))
