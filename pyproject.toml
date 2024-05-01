@@ -36,9 +36,9 @@ coverage = [
 ]
 
 [project.urls]
-Source = "https://code.kodo.org.uk/kilter/kilter.protocol"
-Issues = "https://code.kodo.org.uk/kilter/kilter.protocol/-/issues"
-Documentation = "http://kilter.doc.kodo.org.uk/kilter.protocol"
+Source = "https://github.com/domsekotill/kilter.protocol"
+Issues = "https://github.com/domsekotill/kilter.protocol/issues"
+Documentation = "https://kilter.kodo.org.uk/kilter.protocol/"
 
 
 [tool.isort]

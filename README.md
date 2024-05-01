@@ -1,4 +1,8 @@
+<!--
+# Disable Gitlab link until hosting is more reliable
 [![gitlab-ico]][gitlab-link]
+-->
+[![github-ico]][github-link]
 [![licence-mpl20]](/LICENCE.txt)
 [![pre-commit-ico]][pre-commit-link]
 [![pipeline-status]][pipeline-report]
@@ -59,6 +63,14 @@ makes writing a third-party parser difficult.
 [gitlab-link]:
   https://code.kodo.org.uk/kilter/kilter.protocol
   "Kilter Protocol at code.kodo.org.uk"
+
+[github-ico]:
+  https://img.shields.io/badge/GitHub-domsekotill/kilter.protocol-blue.svg?logo=github
+  "GitHub"
+
+[github-link]:
+	https://github.com/domsekotill/kilter.protocol
+	"Kilter Protocol at github.com"
 
 [pre-commit-ico]:
   https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
