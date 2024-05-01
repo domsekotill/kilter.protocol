@@ -501,7 +501,7 @@ class FilterProtocolTests(unittest.TestCase):
 			ProtocolFlags.SKIP|ProtocolFlags.NR_CONNECT|ProtocolFlags.NR_HELO,
 		)
 
-		assert protocol.skip == True
+		assert protocol.skip is True
 		assert AddHeader.ident in protocol.actions
 		assert ChangeHeader.ident in protocol.actions
 		assert InsertHeader.ident in protocol.actions
@@ -513,7 +513,7 @@ class FilterProtocolTests(unittest.TestCase):
 		"""
 		protocol = negotiated_protocol(ActionFlags.NONE, ProtocolFlags.NONE)
 
-		assert protocol.skip == False
+		assert protocol.skip is False
 		assert len(protocol.nr) == 0
 
 	def test_needs_response(self) -> None:

@@ -52,6 +52,9 @@ ignore_init = true
 [tool.flakeheaven]
 base = "https://code.kodo.org.uk/dom/project-templates/-/raw/main/.flakerules.toml"
 
+[tool.flakeheaven.exceptions."kilter/protocol/core.py"]
+pycodestyle = ["-E241"]
+
 [tool.flakeheaven.exceptions."kilter/protocol/messages.py"]
 flake8-docstrings = ["-D102"]
 
