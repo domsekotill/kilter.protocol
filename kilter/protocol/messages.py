@@ -250,7 +250,7 @@ class Message(metaclass=ABCMeta):
 		try:
 			msg_class = cls._message_classes[ident]
 		except KeyError:
-			raise UnknownMessage(buf[:end].tobytes())
+			raise UnknownMessage(buf[:end].tobytes()) from None
 		else:
 			with buf[hdr_size:end] as data:
 				return msg_class.from_buffer(data), end
