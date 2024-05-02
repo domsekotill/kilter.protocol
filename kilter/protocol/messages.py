@@ -336,15 +336,16 @@ class BytesMessage(Message):
 	Base class implementing `Message` abstract methods for messages with unstructured contents
 	"""
 
-	content: memoryview
+	content: bytes|memoryview
 
 	def __init__(self, content: bytes|memoryview):
-		self.content = memoryview(content).toreadonly()
+		self.content = content.toreadonly() if isinstance(content, memoryview) else content
 
 	def __repr__(self) -> str:
-		content = repr(self.content.tobytes()) if len(self.content) <= 30 else \
-			f"{self.content[:20].tobytes()!r} + {len(self.content)-20} further bytes"
-		return f"{self.__class__.__name__}({content})"
+		content = memoryview(self.content)
+		content_str = repr(content.tobytes()) if len(content) <= 30 else \
+			f"{content[:20].tobytes()!r} + {len(content)-20} further bytes"
+		return f"{self.__class__.__name__}({content_str})"
 
 	def __eq__(self, other: object) -> bool:
 		if not isinstance(other, type(self)):
@@ -359,10 +360,12 @@ class BytesMessage(Message):
 		buf[:] = self.content
 
 	def release(self) -> None:
-		self.content.release()
+		if isinstance(self.content, memoryview):
+			self.content.release()
 
 	def freeze(self) -> None:
-		self.content = memoryview(self.content.tobytes())
+		if isinstance(self.content, memoryview):
+			self.content = self.content.tobytes()
 
 
 # MTA Setup Commands
